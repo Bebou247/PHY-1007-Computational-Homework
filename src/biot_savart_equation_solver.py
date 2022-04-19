@@ -29,5 +29,5 @@ class BiotSavartEquationSolver:
             B_x = B_y = 0 is always True in our 2D world.
         """
         U_0 = 10**-7
-        x, y, z = electric_current.shape
+        x, y, z = electric_current.shape()
         raise NotImplementedError

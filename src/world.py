@@ -1,13 +1,12 @@
 from typing import List, Tuple, Union
 
 import numpy as np
-from scipy.constants import mu_0
-
 from src.biot_savart_equation_solver import BiotSavartEquationSolver
 from src.circuit import Circuit
 from src.fields import ScalarField, VectorField
 from src.laplace_equation_solver import LaplaceEquationSolver
 from src.wire import Wire
+
 
 
 class World:
