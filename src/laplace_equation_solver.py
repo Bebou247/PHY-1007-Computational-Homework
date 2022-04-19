@@ -9,7 +9,7 @@ class LaplaceEquationSolver:
     voltage field V (for example due to wires).
     """
 
-    def __init__(self, nb_iterations: int = 1000):
+    def __init__(self, nb_iterations: int = 100000):
         """
         Laplace solver constructor. Used to define the number of iterations for the relaxation method.
 
@@ -38,4 +38,17 @@ class LaplaceEquationSolver:
             the wires and in the empty space between the wires, while the field V always gives V(x, y) = 0 if (x, y)
             is not a point belonging to an electric wire.
         """
-        raise NotImplementedError
+        voltage = np.pad(constant_voltage, pad_width=1, mode='constant', constant_values=0)
+        for i in range(self.nb_iterations):
+            a_1 = voltage[:-2, 1:-1]/4
+            a_2 = voltage[2:,1:-1]/4
+            a_3 = voltage[1:-1,:-2]/4
+            a_4 = voltage[1:-1, 2:]/4
+            voltage_n1 = (a_1+a_2+a_3+a_4)
+            fin = np.where(constant_voltage ==0, voltage_n1, constant_voltage.copy())
+            if np.max(abs(fin- voltage_n1)) <= 1**-10:
+                break
+            else :
+                voltage = np.pad(fin, 1)
+        return ScalarField(fin)
+        

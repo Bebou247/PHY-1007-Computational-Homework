@@ -132,7 +132,8 @@ class World:
         if not self.wires:
             raise ValueError("Place at least one wire before computing the circuits' fields.")
         else:
-            raise NotImplementedError
+            self._potential = LaplaceEquationSolver().solve(self._wires_voltage)
+            self._electric_field = VectorField(-self._potential.gradient())
 
     def show_wires_voltage(self):
         """
