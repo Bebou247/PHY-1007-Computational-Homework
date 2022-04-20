@@ -49,6 +49,7 @@ class TestWorld(unittest.TestCase):
         self.assertAlmostEqual(computed_value[1], true_value[1])
         # We deliberately don't test the last value of the vector, because it's equal to 0 and could therefore be
         # omitted.
+        print(computed_value[2])
 
     def testShouldReturnTheRightEnergyFluxVectorAtCenter(self):
         true_value = [1.66078258e-02, -2.66764386e-12, 0]
@@ -58,7 +59,7 @@ class TestWorld(unittest.TestCase):
         self.assertAlmostEqual(computed_value[1], true_value[1])
         # We deliberately don't test the last value of the vector, because it's equal to 0 and could therefore be
         # omitted.
-
+        print(computed_value[0])
 
 if __name__ == "__main__":
     unittest.main()

@@ -28,6 +28,21 @@ class BiotSavartEquationSolver:
             B_z(x, y) are the 3 components of the magnetic vector at a given point (x, y) in space. Note that
             B_x = B_y = 0 is always True in our 2D world.
         """
-        U_0 = 10**-7
-        x, y, z = electric_current.shape()
-        raise NotImplementedError
+
+        x, y, z = electric_current.shape
+        constante = 1.2566*10**(-6)/(4*np.pi)
+        magnetic_field = np.zeros(electric_current.shape)
+
+        for i in range(x):
+            for j in range(y):
+                for n in range(x):
+                    for m in range(y):
+                        if (i == n and j == m) or np.sum(electric_current[n, m]) == 0:
+                            continue
+                        else:
+                            r_vecteur = np.array([i - n, j - m, 0])
+                            r_norme = np.sqrt(np.sum(np.square(r_vecteur)))
+                            r_normalise = r_vecteur / r_norme
+                            magnetic_field[i, j] += np.cross(electric_current[n, m], r_normalise) / (r_norme ** 2)
+
+        return VectorField(magnetic_field * constante)

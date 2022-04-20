@@ -23,6 +23,4 @@ class TestWorld(unittest.TestCase):
     world = World(WORLD_SHAPE)
     world.place(CIRCUIT)
     world.compute()
-    world.show_potential()
-    world.show_electric_field()
-    #world.show_all()
+    world.show_all()
