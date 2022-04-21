@@ -29,19 +29,28 @@ class BiotSavartEquationSolver:
             B_x = B_y = 0 is always True in our 2D world.
         """
 
-        y, x, z = electric_current.shape
+        x, y, z = electric_current.shape
+
+        x, y, z = int(x), int(y), int(z)
         constante = mu_0/(4*np.pi)
         magnetic_field = np.zeros(electric_current.shape)
 
         for i in range(x):
             for j in range(y):
-                for n in range(x):
-                    for m in range(y):
-                        if (i == n and j == m) or np.sum(electric_current[m, n]) == 0:
-                            continue
-                        r_vecteur = np.array([i-n, -(j-m), 0])
-                        r_norme = np.sqrt(np.sum(np.square(r_vecteur)))
-                        r_normalise = r_vecteur/r_norme
-                        magnetic_field[j, i] += constante * np.cross(electric_current[m, n], r_normalise, axisa= 0, axisb= 0, axisc= -1)/(r_norme**2)
+                if np.sum(electric_current[i, j]) == 0:
+                    continue
+                else:
+                    for n in range(x):
+                        for m in range(y):
+                            if i == n and j == m:
+                                continue
+                           
+                            else:
+                                r_vecteur = np.array([(i-n), (j-m), 0])
+                                r_norme = np.sqrt(np.sum(np.square(r_vecteur)))
+                                r_normalise = r_vecteur/r_norme
+                                magnetic_field[m, n] += constante * -np.cross(electric_current[i, j], r_normalise, axisa= 0, axisb= 0, axisc= -1)/(r_norme**2)
 
         return VectorField(magnetic_field)
+
+       
