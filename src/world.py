@@ -117,7 +117,7 @@ class World:
         elif isinstance(an_object, Circuit):
             self._place_circuit(an_object)
 
-    def compute(self, nb_relaxation_iterations: int = 1000):
+    def compute(self, nb_relaxation_iterations: int = 10000):
         """
         Calculates all the fields present in the world using the voltage and current fields produced by the wires in the
         circuits. The known fields are the voltage (self._wires_voltage) and current (self._wires_current) fields. The
