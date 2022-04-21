@@ -1,13 +1,14 @@
 from typing import List, Tuple, Union
+from matplotlib.pyplot import xlabel, ylabel
 
 import numpy as np
+from scipy.constants import mu_0
+
 from src.biot_savart_equation_solver import BiotSavartEquationSolver
 from src.circuit import Circuit
 from src.fields import ScalarField, VectorField
 from src.laplace_equation_solver import LaplaceEquationSolver
 from src.wire import Wire
-from scipy.constants import mu_0
-
 
 
 class World:
@@ -23,12 +24,10 @@ class World:
         Creates an empty voltage scalar field (self._wires_voltage) and an empty electric current vector field
         (self._wires_current) the size of the world. Also initializes the lists of wires and circuits contained in the
         world to empty lists.
-
         Parameters
         ----------
         shape : Tuple[int, int]
             Two-dimensional tuple defining the size (x, y) of the world.
-
         Attributes
         ----------
         self.wires : List[Wire]
@@ -70,15 +69,14 @@ class World:
 
         self._wires_voltage = ScalarField(np.zeros(shape))
         self._wires_current = VectorField(np.zeros((shape[0], shape[1], 3)))
-        self._magnetic_field = None
         self._potential = None
         self._electric_field = None
+        self._magnetic_field = None
         self._energy_flux = None
 
     def _place_wire(self, wire: Wire):
         """
         Place a wire in the world and change the voltage and current fields accordingly.
-
         Parameters
         ----------
         wire : Wire
@@ -86,13 +84,11 @@ class World:
         """
         self._wires_current[wire.position] = wire.current
         self._wires_voltage[wire.position] = wire.voltage
-
         self.wires.append(wire)
 
     def _place_circuit(self, circuit: Circuit):
         """
         Place a circuit in the world and change the voltage and current fields accordingly.
-
         Parameters
         ----------
         circuit : Circuit
@@ -106,7 +102,6 @@ class World:
     def place(self, an_object: Union[Circuit, Wire]):
         """
         Place an object in the world and change the voltage and current fields accordingly.
-
         Parameters
         ----------
         an_object : Union[Circuit, Wire]
@@ -123,7 +118,6 @@ class World:
         circuits. The known fields are the voltage (self._wires_voltage) and current (self._wires_current) fields. The
         fields we need to compute are the potential (self._potential), the electric field (self._electric_field), the
         magnetic field (self._magnetic_field) and the energy flux (self._energy_flux).
-
         Parameters
         ----------
         nb_relaxation_iterations : int
@@ -134,15 +128,14 @@ class World:
         else:
             self._potential = LaplaceEquationSolver().solve(self._wires_voltage)
             self._electric_field = VectorField(-self._potential.gradient())
-            self._magnetic_field = VectorField(BiotSavartEquationSolver().solve(self._wires_current))
+            self._magnetic_field = BiotSavartEquationSolver().solve(self._wires_current)
             self._energy_flux = VectorField(np.cross(self._electric_field, self._magnetic_field)/mu_0)
-
     def show_wires_voltage(self):
         """
         Shows wires' voltage field.
         """
         if self.wires:
-            self._wires_voltage.show(title="Initial voltage")
+            self._wires_voltage.show(title="Initial voltage", xlabel = "[m]", ylabel = "[m]")
         else:
             raise self.EmptyWorldException
 
@@ -151,14 +144,13 @@ class World:
         Shows the electric potential.
         """
         if self.wires:
-            self._potential.show(title="Potential")
+            self._potential.show(title="Potential", xlabel = "[m]", ylabel = "[m]")
         else:
             raise self.EmptyWorldException
 
     def show_electric_field(self, hide_wires: bool = True):
         """
         Shows the electric field.
-
         Parameters
         ----------
         hide_wires : bool
@@ -173,7 +165,7 @@ class World:
             else:
                 electric_field = self._electric_field
 
-            electric_field.show(title="Electric field")
+            electric_field.show(title="Electric field", xlabel = "[m]", ylabel = "[m]")
         else:
             raise self.EmptyWorldException
 
@@ -182,7 +174,7 @@ class World:
         Shows the z-component of the magnetic field.
         """
         if self.wires:
-            self._magnetic_field.z.show(title="Magnetic field (z component)")
+            self._magnetic_field.z.show(title="Magnetic field (z component)", xlabel = "[m]", ylabel = "[m]")
         else:
             raise self.EmptyWorldException
 
@@ -191,7 +183,7 @@ class World:
         Shows the energy flux.
         """
         if self.wires:
-            self._energy_flux.show(title="Energy flux")
+            self._energy_flux.show(title="Energy flux", xlabel = "[m]", ylabel = "[m]")
         else:
             raise self.EmptyWorldException
 
