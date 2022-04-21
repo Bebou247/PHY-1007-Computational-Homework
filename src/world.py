@@ -6,6 +6,7 @@ from src.circuit import Circuit
 from src.fields import ScalarField, VectorField
 from src.laplace_equation_solver import LaplaceEquationSolver
 from src.wire import Wire
+from scipy.constants import mu_0
 
 
 
@@ -133,8 +134,8 @@ class World:
         else:
             self._potential = LaplaceEquationSolver().solve(self._wires_voltage)
             self._electric_field = VectorField(-self._potential.gradient())
-            self._magnetic_field = BiotSavartEquationSolver().solve(self._wires_current)
-            self._energy_flux = np.cross(self._magnetic_field, self._electric_field)/(1.2566*10**(-6))
+            self._magnetic_field = VectorField(BiotSavartEquationSolver().solve(self._wires_current))
+            self._energy_flux = np.cross(self._electric_field, self._magnetic_field)/mu_0
 
     def show_wires_voltage(self):
         """

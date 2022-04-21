@@ -30,7 +30,7 @@ class BiotSavartEquationSolver:
         """
 
         x, y, z = electric_current.shape
-        constante = 1.2566*10**(-6)/(4*np.pi)
+        constante = mu_0/(4*np.pi)
         magnetic_field = np.zeros(electric_current.shape)
 
         for i in range(x):
@@ -40,9 +40,9 @@ class BiotSavartEquationSolver:
                         if (i == n and j == m) or np.sum(electric_current[n, m]) == 0:
                             continue
                         else:
-                            r_vecteur = np.array([i - n, j - m, 0])
+                            r_vecteur = np.array([i-n, -(j-m), 0])
                             r_norme = np.sqrt(np.sum(np.square(r_vecteur)))
-                            r_normalise = r_vecteur / r_norme
-                            magnetic_field[i, j] += np.cross(electric_current[n, m], r_normalise) / (r_norme ** 2)
+                            r_normalise = r_vecteur/r_norme
+                            magnetic_field[i, j] += constante * np.cross(electric_current[m, n], r_normalise, axisa= 0, axisb= 0, axisc= -1)/(r_norme**2)
 
-        return VectorField(magnetic_field * constante)
+        return VectorField(magnetic_field)
