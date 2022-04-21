@@ -1,3 +1,4 @@
+from matplotlib.pyplot import magnitude_spectrum
 import numpy as np
 from scipy.constants import mu_0, pi
 
@@ -32,24 +33,27 @@ class BiotSavartEquationSolver:
         x, y, z = electric_current.shape
 
         x, y, z = int(x), int(y), int(z)
-        constante = mu_0/(4*np.pi)
+        constante = mu_0/(4*pi)
         magnetic_field = np.zeros(electric_current.shape)
+        mat_moyenne = electric_current.copy()
 
         for i in range(x):
             for j in range(y):
-                if np.sum(electric_current[i, j]) == 0:
+                if (electric_current[i, j] == np.array([0, 0,0])).all():
                     continue
                 else:
                     for n in range(x):
                         for m in range(y):
-                            if i == n and j == m:
-                                continue
-                           
-                            else:
-                                r_vecteur = np.array([(i-n), (j-m), 0])
+                            if (electric_current[n, m] == np.array([0, 0, 0])).all():
+                        
+                                r_vecteur = ([(i-n), (j-m), 0])
                                 r_norme = np.sqrt(np.sum(np.square(r_vecteur)))
                                 r_normalise = r_vecteur/r_norme
-                                magnetic_field[m, n] += constante * -np.cross(electric_current[i, j], r_normalise, axisa= 0, axisb= 0, axisc= -1)/(r_norme**2)
+                                mat_moyenne[n, m] = constante * (np.cross(r_normalise, electric_current[i, j])/(r_norme**2))
+                            else:
+                                continue 
+                    magnetic_field = np.add(mat_moyenne, magnetic_field)
+
 
         return VectorField(magnetic_field)
 

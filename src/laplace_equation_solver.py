@@ -9,7 +9,7 @@ class LaplaceEquationSolver:
     voltage field V (for example due to wires).
     """
 
-    def __init__(self, nb_iterations: int = 3000):
+    def __init__(self, nb_iterations: int = 10000):
         """
         Laplace solver constructor. Used to define the number of iterations for the relaxation method.
 

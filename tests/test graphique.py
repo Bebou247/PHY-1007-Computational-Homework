@@ -48,7 +48,7 @@ class TestWorld(unittest.TestCase):
         Wire(start=(61, 10), stop=(35, 10), current=Current(x=0, y=1), voltage=-4.5),
     ]
 
-    CIRCUIT = Circuit(wires=WIRES_3)
+    CIRCUIT = Circuit(wires=WIRES_0)
     world = World(WORLD_SHAPE)
     world.place(CIRCUIT)
     world.compute()
