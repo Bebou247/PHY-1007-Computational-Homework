@@ -135,7 +135,7 @@ class World:
         Shows wires' voltage field.
         """
         if self.wires:
-            self._wires_voltage.show(title="Initial voltage", xlabel = "[m]", ylabel = "[m]")
+            self._wires_voltage.show(title="Initial voltage", xlabel="[m]", ylabel="[m]")
         else:
             raise self.EmptyWorldException
 
@@ -144,7 +144,7 @@ class World:
         Shows the electric potential.
         """
         if self.wires:
-            self._potential.show(title="Potential", xlabel = "[m]", ylabel = "[m]")
+            self._potential.show(title="Potential", xlabel="[m]", ylabel="[m]")
         else:
             raise self.EmptyWorldException
 
