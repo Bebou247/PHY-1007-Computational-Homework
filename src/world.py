@@ -112,7 +112,7 @@ class World:
         elif isinstance(an_object, Circuit):
             self._place_circuit(an_object)
 
-    def compute(self, nb_relaxation_iterations: int = 3000):
+    def compute(self, nb_relaxation_iterations: int = 10000):
         """
         Calculates all the fields present in the world using the voltage and current fields produced by the wires in the
         circuits. The known fields are the voltage (self._wires_voltage) and current (self._wires_current) fields. The
@@ -128,7 +128,7 @@ class World:
         else:
             self._potential = LaplaceEquationSolver().solve(self._wires_voltage)
             self._electric_field = VectorField(-self._potential.gradient())
-            self._magnetic_field = VectorField(BiotSavartEquationSolver().solve(self._wires_current))
+            self._magnetic_field = BiotSavartEquationSolver().solve(self._wires_current)
             self._energy_flux = VectorField(np.cross(self._electric_field, self._magnetic_field)/mu_0)
     def show_wires_voltage(self):
         """
