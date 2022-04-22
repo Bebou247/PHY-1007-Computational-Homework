@@ -1,3 +1,4 @@
+import math
 from matplotlib.pyplot import magnitude_spectrum
 import numpy as np
 from scipy.constants import mu_0, pi
@@ -34,25 +35,28 @@ class BiotSavartEquationSolver:
 
         x, y, z = int(x), int(y), int(z)
         constante = mu_0/(4*pi)
-        magnetic_field = np.zeros(electric_current.shape)
-        mat_moyenne = electric_current.copy()
+        magnetic_field = np.zeros((x, y, z))
 
-        for i in range(x):
-            for j in range(y):
-                if (electric_current[i, j] == np.array([0, 0,0])).all():
+        for i in range((x)):
+            for j in range((y)):
+                if (electric_current[i, j, :] == [0, 0,0]).all():
                     continue
                 else:
+                    mat_v = electric_current.copy()
                     for n in range(x):
                         for m in range(y):
-                            if (electric_current[n, m] == np.array([0, 0, 0])).all():
+                            if (electric_current[n, m, :] == [0, 0, 0]).all():
                         
-                                r_vecteur = ([(i-n), (j-m), 0])
-                                r_norme = np.sqrt(np.sum(np.square(r_vecteur)))
-                                r_normalise = r_vecteur/r_norme
-                                mat_moyenne[n, m] = constante * (np.cross(r_normalise, electric_current[i, j])/(r_norme**2))
+                                r_vecteur = np.array([(i-n), (j-m), 0])
+                                r_norme = math.sqrt((i-n)**2+ (j-m)**2)
+                                a = electric_current[i, j]
+                                prod_vec = np.cross(r_vecteur, a)
+                                mat_v[n, m] = constante * (prod_vec/(r_norme**3))
+                                if r_norme == 0:
+                                    mat_v[n, m] =(0, 0, 0)
                             else:
                                 continue 
-                    magnetic_field = np.add(mat_moyenne, magnetic_field)
+                    magnetic_field = np.add(magnetic_field, mat_v)
 
 
         return VectorField(magnetic_field)

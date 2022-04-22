@@ -48,8 +48,20 @@ class TestWorld(unittest.TestCase):
         Wire(start=(61, 10), stop=(35, 10), current=Current(x=0, y=1), voltage=-4.5),
     ]
 
-    CIRCUIT = Circuit(wires=WIRES_0)
+#Circuit1 VOIR LE PDF POUR LES FIGURES
+    wire1= [
+        Wire(start=(70, 45), stop=(45, 45), current=Current(x=-1, y=0), voltage=4.5),
+        Wire(start=(45, 45), stop=(45, 96), current=Current(x=0, y=1), voltage=4.5),
+        Wire(start=(45, 96), stop=(70, 96), current=Current(x=1, y=0), voltage=4.5),
+        Wire(start=(70, 96), stop=(96, 96), current=Current(x=1, y=0), voltage=-4.5),
+        Wire(start=(96, 96), stop=(96, 45), current=Current(x=0, y=-1), voltage=-4.5),
+        Wire(start=(96, 45), stop=(70, 45), current=Current(x=-1, y=0), voltage=-4.5),
+    ]
+    
+    CIRCUIT = Circuit(wires=wire1)
     world = World(WORLD_SHAPE)
     world.place(CIRCUIT)
     world.compute()
     world.show_all()
+
+    world = World(shape=(140, 140))
