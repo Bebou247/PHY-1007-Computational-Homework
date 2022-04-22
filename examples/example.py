@@ -44,7 +44,7 @@ if __name__ == "__main__":
         Wire(start=(61, 10), stop=(35, 10), current=Current(x=-1, y=0), voltage=-4.5),
     ]
 
-    circuit = Circuit(wires=WIRES_0)
+    circuit = Circuit(wires=WIRES_2)
 
     world.place(circuit)
 
